@@ -251,7 +251,7 @@ class TitanBot extends Client {
 
     // Custom Scheduled Session Message (Runs at 3:30 AM, 9:30 AM, 3:30 PM, 9:30 PM EST -> UTC times below)
     cron.schedule('30 2,8,14,20 * * *', runSafeTask('session_announcement', async () => {
-      const CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE'; // Replace with your channel ID
+      const CHANNEL_ID = '1558647574498648164'; // Replace with your channel ID
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       
       if (channel) {
