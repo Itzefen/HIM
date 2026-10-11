@@ -1,6 +1,3 @@
-Here is your complete, fully corrected src/app.js file with the exact schedule, channel ID (1558098689682178139), role mentions, and { timezone: "America/New_York" } applied to all four cron jobs:
-
-JavaScript
 import 'dotenv/config';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import { REST } from '@discordjs/rest';
