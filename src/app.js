@@ -244,26 +244,69 @@ class TitanBot extends Client {
     startServer(configuredPort, 0);
   }
 
-  setupCronJobs() {
+setupCronJobs() {
     cron.schedule('0 6 * * *', runSafeTask('birthday_check', () => checkBirthdays(this)));
     cron.schedule('* * * * *', runSafeTask('giveaway_check', () => checkGiveaways(this)));
     cron.schedule('*/15 * * * *', runSafeTask('counter_update', () => this.updateAllCounters()));
 
-    // Custom Scheduled Session Message (Runs at 3:30 AM, 9:30 AM, 3:30 PM, 9:30 PM EST -> UTC times below)
-    cron.schedule('30 2,8,14,20 * * *', runSafeTask('session_announcement', async () => {
-      const CHANNEL_ID = '1558647574498648164'; // Replace with your channel ID
+    const CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE'; // Replace with your actual channel ID
+
+    // 1. 3:30 AM EST (08:30 UTC) -> Session 1
+    cron.schedule('30 8 * * *', runSafeTask('session_1', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
-      
       if (channel) {
-        await channel.send(`@Lep Line Booster / @Lullaby Booster / @Session 1  
+        await channel.send(`@Session 1  
 # Session preparation.
 - Please begin preparations for Session #1
-- All lullaby boosters please begin boosting until the preparations, and bounty are over.
-- All Lep Line Boosters please ensure there is 8x server luck during bounties.
+- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
+- All @Lep Line Booster please ensure there is 8x server luck during bounties.
 
 *Failure to do so will result in a strike*`);
       }
     }));
+
+    // 2. 9:30 AM EST (14:30 UTC) -> Session 2
+    cron.schedule('30 14 * * *', runSafeTask('session_2', async () => {
+      const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
+      if (channel) {
+        await channel.send(`@Session 2  
+# Session preparation.
+- Please begin preparations for Session #2
+- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
+- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+
+*Failure to do so will result in a strike*`);
+      }
+    }));
+
+    // 3. 3:30 PM EST (20:30 UTC) -> Session 3
+    cron.schedule('30 20 * * *', runSafeTask('session_3', async () => {
+      const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
+      if (channel) {
+        await channel.send(`@Session 3  
+# Session preparation.
+- Please begin preparations for Session #3
+- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
+- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+
+*Failure to do so will result in a strike*`);
+      }
+    }));
+
+    // 4. 9:30 PM EST (02:30 UTC) -> Session 4
+    cron.schedule('30 2 * * *', runSafeTask('session_4', async () => {
+      const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
+      if (channel) {
+        await channel.send(`@Session 4  
+# Session preparation.
+- Please begin preparations for Session #4
+- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
+- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+
+*Failure to do so will result in a strike*`);
+      }
+    }));
+  }
   }
 
   async updateAllCounters() {
