@@ -1,4 +1,4 @@
-Here is your full, complete src/app.js file with the session order updated so that Session 1 fires at 9:30 PM EST:
+Here is your complete, fully corrected src/app.js file with the exact schedule, channel ID (1558098689682178139), role mentions, and { timezone: "America/New_York" } applied to all four cron jobs:
 
 JavaScript
 import 'dotenv/config';
@@ -253,8 +253,8 @@ class TitanBot extends Client {
 
     const CHANNEL_ID = '1558098689682178139';
 
-    // 1. 9:30 PM EST (02:30 UTC) -> Session 1
-    cron.schedule('30 2 * * *', runSafeTask('session_1', async () => {
+    // 1. 9:30 PM EST -> Session 1
+    cron.schedule('30 21 * * *', runSafeTask('session_1', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
         await channel.send(`<@&1558098689682178139>  
@@ -265,10 +265,10 @@ class TitanBot extends Client {
 
 *Failure to do so will result in a strike*`);
       }
-    }));
+    }), { timezone: "America/New_York" });
 
-    // 2. 3:30 AM EST (08:30 UTC) -> Session 2
-    cron.schedule('30 8 * * *', runSafeTask('session_2', async () => {
+    // 2. 3:30 AM EST -> Session 2
+    cron.schedule('30 3 * * *', runSafeTask('session_2', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
         await channel.send(`<@&1558098729981059204>  
@@ -279,10 +279,10 @@ class TitanBot extends Client {
 
 *Failure to do so will result in a strike*`);
       }
-    }));
+    }), { timezone: "America/New_York" });
 
-    // 3. 9:30 AM EST (14:30 UTC) -> Session 3
-    cron.schedule('30 14 * * *', runSafeTask('session_3', async () => {
+    // 3. 9:30 AM EST -> Session 3
+    cron.schedule('30 9 * * *', runSafeTask('session_3', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
         await channel.send(`<@&1558098774872825967>  
@@ -293,10 +293,10 @@ class TitanBot extends Client {
 
 *Failure to do so will result in a strike*`);
       }
-    }));
+    }), { timezone: "America/New_York" });
 
-    // 4. 3:30 PM EST (20:30 UTC) -> Session 4
-    cron.schedule('30 20 * * *', runSafeTask('session_4', async () => {
+    // 4. 3:30 PM EST -> Session 4
+    cron.schedule('30 15 * * *', runSafeTask('session_4', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
         await channel.send(`<@&1558098922155806750>  
@@ -307,7 +307,7 @@ class TitanBot extends Client {
 
 *Failure to do so will result in a strike*`);
       }
-    }));
+    }), { timezone: "America/New_York" });
   }
 
   async updateAllCounters() {
