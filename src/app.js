@@ -23,17 +23,13 @@ class TitanBot extends Client {
   constructor() {
     super({
       intents: [
-        
         GatewayIntentBits.Guilds,                        
-        GatewayIntentBits.GuildMembers,                 
-
-        GatewayIntentBits.GuildMessages,                
+        GatewayIntentBits.GuildMembers,               
+        GatewayIntentBits.GuildMessages,              
         GatewayIntentBits.GuildMessageReactions,        
         GatewayIntentBits.MessageContent,               
         GatewayIntentBits.DirectMessages,
-
         GatewayIntentBits.GuildVoiceStates,             
-
         GatewayIntentBits.GuildBans,                    
       ],
     });
@@ -66,8 +62,8 @@ class TitanBot extends Client {
         logger.warn('║ ⚠️  DATABASE RUNNING IN DEGRADED MODE                 ║');
         logger.warn('║                                                       ║');
         logger.warn('║ Connection: In-Memory Storage (PostgreSQL unavailable)║');
-        logger.warn('║ Data Persistence: DISABLED - data lost on restart    ║');
-        logger.warn('║ Action Required: Fix PostgreSQL and restart bot      ║');
+        logger.warn('║ Data Persistence: DISABLED - data lost on restart     ║');
+        logger.warn('║ Action Required: Fix PostgreSQL and restart bot       ║');
         logger.warn('╚═══════════════════════════════════════════════════════╝');
         logger.warn('');
       } else {
@@ -252,6 +248,22 @@ class TitanBot extends Client {
     cron.schedule('0 6 * * *', runSafeTask('birthday_check', () => checkBirthdays(this)));
     cron.schedule('* * * * *', runSafeTask('giveaway_check', () => checkGiveaways(this)));
     cron.schedule('*/15 * * * *', runSafeTask('counter_update', () => this.updateAllCounters()));
+
+    // Custom Scheduled Session Message (Runs at 3:30 AM, 9:30 AM, 3:30 PM, 9:30 PM EST -> UTC times below)
+    cron.schedule('30 2,8,14,20 * * *', runSafeTask('session_announcement', async () => {
+      const CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE'; // Replace with your channel ID
+      const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
+      
+      if (channel) {
+        await channel.send(`@Lep Line Booster / @Lullaby Booster / @Session 1  
+# Session preparation.
+- Please begin preparations for Session #1
+- All lullaby boosters please begin boosting until the preparations, and bounty are over.
+- All Lep Line Boosters please ensure there is 8x server luck during bounties.
+
+*Failure to do so will result in a strike*`);
+      }
+    }));
   }
 
   async updateAllCounters() {
@@ -279,8 +291,6 @@ class TitanBot extends Client {
           }
         }
         
-        // Save cleaned counters if any were orphaned
-        // Save cleaned counters if any were orphaned
         if (orphanedCounters.length > 0) {
           await saveServerCounters(this, guildId, validCounters);
           logger.info(`Cleaned up ${orphanedCounters.length} orphaned counter(s) from guild ${guildId} during scheduled update`);
@@ -338,7 +348,6 @@ class TitanBot extends Client {
     logger.info(`${'='.repeat(60)}`);
 
     try {
-      
       logger.info('Stopping cron jobs...');
       cron.getTasks().forEach(task => task.stop());
       logger.info('✅ Cron jobs stopped');
@@ -353,8 +362,6 @@ class TitanBot extends Client {
         logger.info('✅ Web server closed');
       }
 
-      // Close database connection
-      // Close database connection
       if (this.db && this.db.db) {
         logger.info('Closing database connection...');
         try {
@@ -373,13 +380,12 @@ class TitanBot extends Client {
           this.destroy();
           logger.info('✅ Discord client destroyed');
         } catch (error) {
-
           logger.warn('Discord client destroy warning (non-critical):', error.message);
         }
       }
 
       logger.info('✅ Graceful shutdown complete');
-  shutdownLog('Bot stopped successfully.');
+      shutdownLog('Bot stopped successfully.');
       process.exit(0);
     } catch (error) {
       logger.error('Error during graceful shutdown:', error);
@@ -396,7 +402,6 @@ try {
     process.on('SIGINT', () => bot.shutdown('SIGINT'));
     
     process.on('uncaughtException', (error) => {
-      // Process state may be corrupt after an uncaught throw; log and shut down cleanly.
       handleTaskError('uncaught_exception', error, { fatal: true });
       bot.shutdown('UNCAUGHT_EXCEPTION');
     });
@@ -411,8 +416,6 @@ try {
         return;
       }
 
-      // A stray rejection is a bug to fix, not a reason to take the bot down.
-      // Log loudly with full context; the central task handler categorizes it.
       handleTaskError('unhandled_rejection', reason instanceof Error ? reason : new Error(String(reason)), {
         errorCode: ErrorCodes.UNHANDLED_REJECTION,
       });
