@@ -22,14 +22,14 @@ class TitanBot extends Client {
   constructor() {
     super({
       intents: [
-        GatewayIntentBits.Guilds,                        
-        GatewayIntentBits.GuildMembers,               
-        GatewayIntentBits.GuildMessages,              
-        GatewayIntentBits.GuildMessageReactions,        
-        GatewayIntentBits.MessageContent,               
+        GatewayIntentBits.Guilds,                    
+        GatewayIntentBits.GuildMembers,            
+        GatewayIntentBits.GuildMessages,           
+        GatewayIntentBits.GuildMessageReactions,       
+        GatewayIntentBits.MessageContent,              
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.GuildVoiceStates,             
-        GatewayIntentBits.GuildBans,                    
+        GatewayIntentBits.GuildVoiceStates,            
+        GatewayIntentBits.GuildBans,                   
       ],
     });
 
@@ -243,22 +243,22 @@ class TitanBot extends Client {
     startServer(configuredPort, 0);
   }
 
-setupCronJobs() {
+  setupCronJobs() {
     cron.schedule('0 6 * * *', runSafeTask('birthday_check', () => checkBirthdays(this)));
     cron.schedule('* * * * *', runSafeTask('giveaway_check', () => checkGiveaways(this)));
     cron.schedule('*/15 * * * *', runSafeTask('counter_update', () => this.updateAllCounters()));
 
-    const CHANNEL_ID = '1558647574498648164'; // Replace with your actual channel ID
+    const CHANNEL_ID = '1558098689682178139';
 
     // 1. 3:30 AM EST (08:30 UTC) -> Session 1
     cron.schedule('30 8 * * *', runSafeTask('session_1', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
-        await channel.send(`@Session 1  
+        await channel.send(`<@&1558098689682178139>  
 # Session preparation.
 - Please begin preparations for Session #1
-- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
-- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+- All <@&1558098382877229096> please begin boosting until the preparations, and bounty are over.
+- All <@&1558098458735284345> please ensure there is 8x server luck during bounties.
 
 *Failure to do so will result in a strike*`);
       }
@@ -268,11 +268,11 @@ setupCronJobs() {
     cron.schedule('30 14 * * *', runSafeTask('session_2', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
-        await channel.send(`@Session 2  
+        await channel.send(`<@&1558098729981059204>  
 # Session preparation.
 - Please begin preparations for Session #2
-- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
-- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+- All <@&1558098382877229096> please begin boosting until the preparations, and bounty are over.
+- All <@&1558098458735284345> please ensure there is 8x server luck during bounties.
 
 *Failure to do so will result in a strike*`);
       }
@@ -282,11 +282,11 @@ setupCronJobs() {
     cron.schedule('30 20 * * *', runSafeTask('session_3', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
-        await channel.send(`@Session 3  
+        await channel.send(`<@&1558098774872825967>  
 # Session preparation.
 - Please begin preparations for Session #3
-- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
-- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+- All <@&1558098382877229096> please begin boosting until the preparations, and bounty are over.
+- All <@&1558098458735284345> please ensure there is 8x server luck during bounties.
 
 *Failure to do so will result in a strike*`);
       }
@@ -296,16 +296,15 @@ setupCronJobs() {
     cron.schedule('30 2 * * *', runSafeTask('session_4', async () => {
       const channel = await this.channels.fetch(CHANNEL_ID).catch(() => null);
       if (channel) {
-        await channel.send(`@Session 4  
+        await channel.send(`<@&1558098922155806750>  
 # Session preparation.
 - Please begin preparations for Session #4
-- All @Lullaby Booster please begin boosting until the preparations, and bounty are over.
-- All @Lep Line Booster please ensure there is 8x server luck during bounties.
+- All <@&1558098382877229096> please begin boosting until the preparations, and bounty are over.
+- All <@&1558098458735284345> please ensure there is 8x server luck during bounties.
 
 *Failure to do so will result in a strike*`);
       }
     }));
-  }
   }
 
   async updateAllCounters() {
