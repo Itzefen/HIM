@@ -1,5 +1,63 @@
+Here is the complete, self-contained file setup combining your variable declaration, the counting game logic, and your shop configuration so you can paste it directly into your main bot file (e.g., index.js or bot.js):
+
+JavaScript
 import { shopItems, getItemById, getItemsByType, getItemPrice, validatePurchase } from './items.js';
 import { botConfig } from '../bot.js';
+
+// ==========================================
+// COUNTING GAME SETUP
+// ==========================================
+
+// Tracks the current number in the counting game
+let currentCount = 0;
+
+// Listening for messages sent in the server
+client.on('messageCreate', async (message) => {
+    // 1. Ignore bot messages and messages outside your counting channel
+    if (message.author.bot || message.channel.id !== '1527092250298024006') return;
+
+    const trimmedContent = message.content.trim();
+    const words = trimmedContent.split(/\s+/);
+    const userNumber = parseInt(words[0], 10);
+
+    // 2. IF IT'S NOT A NUMBER AT ALL (Plain chatter):
+    // Ignore completely so members can talk freely in chat without breaking the count
+    if (isNaN(userNumber)) {
+        return;
+    }
+
+    // 3. IF THERE ARE WORDS AFTER THE NUMBER (e.g., "42 lol"):
+    // Auto-delete the message and warn about incorrect format
+    if (words.length > 1) {
+        try {
+            await message.delete();
+            const warningMsg = await message.channel.send(`${message.author}, **Incorrect Format! Do not add text after numbers.**`);
+            setTimeout(() => warningMsg.delete().catch(() => {}), 3000);
+        } catch (error) {
+            console.error('Failed to delete message:', error);
+        }
+        return;
+    }
+
+    // 4. IF IT IS A STANDALONE NUMBER: Check if it's the correct next count
+    if (userNumber === currentCount + 1) {
+        currentCount++;
+        await message.react('✅');
+    } else {
+        // WRONG NUMBER: Auto-delete the message and warn them
+        try {
+            await message.delete();
+            const warningMsg = await message.channel.send(`${message.author}, **Incorrect Number!**`);
+            setTimeout(() => warningMsg.delete().catch(() => {}), 3000);
+        } catch (error) {
+            console.error('Failed to delete message:', error);
+        }
+    }
+});
+
+// ==========================================
+// SHOP CONFIGURATION & HELPERS
+// ==========================================
 
 const { currency } = botConfig.economy;
 
@@ -42,14 +100,14 @@ export const shopConfig = {
     ],
     
     transaction: {
-cooldown: 1000,
-maxQuantity: 10,
-confirmTimeout: 30000,
+        cooldown: 1000,
+        maxQuantity: 10,
+        confirmTimeout: 30000,
         
         refundPolicy: {
             enabled: true,
-window: 300000,
-fee: 0.1
+            window: 300000,
+            fee: 0.1
         }
     },
     
@@ -60,19 +118,19 @@ fee: 0.1
         showAffordability: true,
         
         colors: {
-primary: '#5865F2',
-success: '#43B581',
-error: '#F04747',
-warning: '#FAA61A',
-info: '#00B0F4',
+            primary: '#5865F2',
+            success: '#43B581',
+            error: '#F04747',
+            warning: '#FAA61A',
+            info: '#00B0F4',
             
             rarity: {
-common: '#99AAB5',
-uncommon: '#2ECC71',
-rare: '#3498DB',
-epic: '#9B59B6',
-legendary: '#F1C40F',
-mythic: '#E74C3C'
+                common: '#99AAB5',
+                uncommon: '#2ECC71',
+                rare: '#3498DB',
+                epic: '#9B59B6',
+                legendary: '#F1C40F',
+                mythic: '#E74C3C'
             }
         },
         
@@ -95,8 +153,8 @@ mythic: '#E74C3C'
     events: {
         restock: {
             enabled: true,
-interval: 86400000,
-announcementChannel: null,
+            interval: 86400000,
+            announcementChannel: null,
             message: '🛒 **Shop Restocked!** New items are now available!'
         },
         
@@ -104,8 +162,8 @@ announcementChannel: null,
             enabled: true,
             schedule: [
                 {
-day: 0,
-discount: 0.2,
+                    day: 0,
+                    discount: 0.2,
                     message: '🔥 **Weekend Sale!** 20% off all items!'
                 },
             ]
@@ -141,7 +199,7 @@ export function getCurrentPrice(itemId, { quantity = 1, userData = null } = {}) 
         }
         
         if (quantity >= 10) {
-discount += 0.1;
+            discount += 0.1;
         }
     }
     
