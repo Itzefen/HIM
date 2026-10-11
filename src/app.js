@@ -1,4 +1,3 @@
-import cron from 'node-cron';
 import 'dotenv/config';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import { REST } from '@discordjs/rest';
@@ -249,7 +248,7 @@ setupCronJobs() {
     cron.schedule('* * * * *', runSafeTask('giveaway_check', () => checkGiveaways(this)));
     cron.schedule('*/15 * * * *', runSafeTask('counter_update', () => this.updateAllCounters()));
 
-    const CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE'; // Replace with your actual channel ID
+    const CHANNEL_ID = '1558647574498648164'; // Replace with your actual channel ID
 
     // 1. 3:30 AM EST (08:30 UTC) -> Session 1
     cron.schedule('30 8 * * *', runSafeTask('session_1', async () => {
