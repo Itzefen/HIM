@@ -20,10 +20,10 @@ const appConfig = {
 
   bot: {
     ...botConfig,
-    token: process.env.DISCORD_TOKEN || process.env.TOKEN,
-    clientId: process.env.CLIENT_ID,
+    token: process.env.DISCORD_TOKEN || process.env.TOKEN || process.env.BOT_TOKEN || '',
+    clientId: process.env.DISCORD_CLIENT_ID || process.env.CLIENT_ID || process.env.APPLICATION_ID || '',
     // Retained for tutorial/setup compatibility; not used for command registration.
-    guildId: process.env.GUILD_ID,
+    guildId: process.env.GUILD_ID || '',
 
     shop: {
       ...botConfig.shop,
